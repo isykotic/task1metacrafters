@@ -1,0 +1,29 @@
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+
+const { PublicKey, Connection } = require('@solana/web3.js');
+
+const recipientPublicKey = process.argv[2];
+
+const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+
+if (!recipientPublicKey) {
+  console.error('Recipient public key is missing.');
+  process.exit(1);
+}
+
+try {
+  const publicKey = new PublicKey(recipientPublicKey);
+} catch (error) {
+  console.error('Invalid recipient public key.');
+  process.exit(1);
+}
+
+const fromAirDropSignature = await connection.requestAirdrop(
+  new PublicKey(recipientPublicKey),
+  2 * LAMPORTS_PER_SOL
+);
+
+console.log('Airdrop signature:', fromAirDropSignature);
+
+export { };
+
